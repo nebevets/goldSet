@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>steveben's gold set</title>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="description" content="set of $20 gold coins"/>
+        <meta name="author" content="steve benedict"/>
+        <link rel="stylesheet" type="text/css" href="./styles/style.css"/>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="./scripts/tasks-controller.js"></script>
+        <script>
+            
+            // notes: convert to es6, unsure about images yet. add jquery. link script, css
+            
+            const PCGS_CERT_LINK = "http://www.pcgs.com/cert/";
+            const NGC_CERT_LINK = "https://www.ngccoin.com/certlookup/";
+            const CAC_CERT_LINK = "http://www.caccoin.com/cgi-bin/lookup3.cgi?";
+            const IMG_DIR = "images/";
+            
+            // need const for image size? eg: 800x600
+           
+            let coin = [];
+            let coinNumber = 0;
+            
+            
+            coin[ 0] = {
+                date:'1850',
+                mintMark:null,
+                variety:null,
+                gradingService:'PCGS',
+                grade:'VF20',
+                denomination:'$20',
+                certNumber:'9724152',
+                cacType:'Gold'
+            };
+            coin[ 1] = {
+                date:'1862',
+                mintMark:'-S',
+                variety:null,
+                gradingService:'PCGS',
+                grade:'XF40',
+                denomination:'$20',
+                certNumber:'6530856',
+                cacType:'Gold'
+            };
+            coin[ 2] = {
+                date:'1863',
+                mintMark:'-S',
+                variety:null,
+                gradingService:'PCGS',
+                grade:'XF40',
+                denomination:'$20',
+                certNumber:'4436948',
+                cacType:'Gold'
+            };
+            coin[ 3] = {
+                date:'1864',
+                mintMark:'-S',
+                variety:null,
+                gradingService:'PCGS',
+                grade:'VF35',
+                denomination:'$20',
+                certNumber:'6532203',
+                cacType:'Gold'
+            };
+            coin[ 4] = {
+                date:'1876',
+                mintMark:'-CC',
+                variety:null,
+                gradingService:'PCGS',
+                grade:'XF40',
+                denomination:'$20',
+                certNumber:'7613165',
+                cacType:'Gold'
+            };
+            
+            function prev(){
+                if (coinNumber == 0){
+                    coinNumber = (coin.length - 1);
+                }
+                else{
+                    --coinNumber;
+                }
+                populateCoinDetails();
+            }
+        
+            function next(){
+                if (coinNumber == (coin.length - 1)){
+                    coinNumber = 0;
+                }
+                else{
+                    ++coinNumber;
+                }
+                populateCoinDetails();
+            }
+        
+            // this is where i set the view. i need to think about refactoring this.
+            function populateCoinDetails(){
+                setImagePath();
+                setMyControls(coin[coinNumber]);
+                setHrefs();
+                return;
+            }
+            
+            function setImagePath(){
+                $('#coinImage').attr('src' , IMG_DIR + coin[coinNumber].certNumber + ".jpg");
+                return;
+            }
+            
+            function setMyControls(xObj){
+                for (var prop in xObj){
+                    if(xObj[prop] != null){
+                        $('#' + prop).text(xObj[prop]);
+                    }
+                }
+                return;
+            }
+            
+            function setHrefs(){
+                switch (coin[coinNumber].gradingService){
+                    case 'PCGS':
+                        $('#certNumber').attr('href', PCGS_CERT_LINK + coin[coinNumber].certNumber);
+                        break;
+                    case 'NGC':
+                        $('#certNumber').attr('href', NGC_CERT_LINK + coin[coinNumber].certNumber);
+                        break;
+                }
+                $('#cacType').attr('href', CAC_CERT_LINK + coin[coinNumber].certNumber);
+                
+                /*
+                if (coin[coinNumber].cacType != ''){
+                    $('#cacType').css("color: gold"); // test for green.
+                }
+                this needs to be fixed.
+                */
+                return;
+            }
+            
+            function keyNav(e){
+                switch (e.keyCode){
+                    case 37:prev();break;
+                    case 39:next();break;
+                    default:break;
+                }
+                return;
+            }
+        </script>
+    </head>
+    <body id="taskPage">
+        <div class="grid">
+            <section class='left'>
+                <a href='#' id="left">&larr;&nbsp;previous</a>
+            </section>
+            <section class='right'>
+                <a href='#' id="right">next&nbsp;&rarr;</a>
+            </section>
+            <section class="content">
+                <img src="" id="coinImage"/>
+            </section>
+            <footer>
+                <div>
+                    <span id="date"></span><span id="mintMark"></span>
+                    <span id="variety"></span>
+                    <span id="denomination"></span>
+                </div>
+                <div>
+                    <span id="gradingService"></span>
+                    <span id="grade"></span>:
+                    <a href="#" id="certNumber" target="_blank"></a>
+                </div>
+            <div>
+                CAC: <a href="#" target="_blank" id="cacType"></a>
+            </div>
+            </footer>
+        </div>
+    </body>
+    <script>
+        $(document).ready(function(){
+                          populateCoinDetails();
+                          tasksController.init($('#taskPage'));
+                          });
+        $(document).on("keydown", function(e){
+                          keyNav(e);
+                          });
+    </script>
+</html>

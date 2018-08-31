@@ -1,0 +1,40 @@
+a {
+    color: #fbd88a;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+body {
+    background-color: black;
+    margin: auto;
+    width: 95vw;
+    text-align: center;
+    user-select: none;
+    font-family: sans-serif;
+}
+img {
+    height: 80vh;
+}
+footer {
+    grid-area: footer;
+    color: #a18232;
+}
+.grid {
+    width: 95vw;
+    display: grid;
+    grid-template-areas: "left right"
+                         "content content"
+                         "footer footer";
+}
+.left {
+    grid-area: left;
+    text-align: left;
+}
+.right {
+    grid-area: right;
+    text-align: right;
+}
+.content {
+    grid-area: content;
+}
